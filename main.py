@@ -131,6 +131,10 @@ def serve():
         comment.reply(get_message())
         log_this_comment(comment)
         replied_comments.append(comment.id)
+        # stream.comments `yields` new comments as they arrive, hence
+        # this for loop never really finishes.
+        # so we call `reply_to_self_comments` on every loop iteration
+        reply_to_self_comments()
 
 
 def reply_to_self_comments():
