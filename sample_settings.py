@@ -8,3 +8,6 @@ user_agent = 'Your User Agent'
 # bot acc
 username = 'your_reddit_bot_ac'
 password = 'your_reddit_bot_pass'
+
+# subs to ignore
+ignore_subs = ['TranscribersOfReddit'.lower(), ]

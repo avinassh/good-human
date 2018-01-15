@@ -11,7 +11,7 @@ from peewee import (SqliteDatabase, Model, CharField, OperationalError,
                     DoesNotExist)
 
 from settings import (app_key, app_secret, username, password,
-                      user_agent)
+                      user_agent, ignore_subs)
 
 reddit_client = praw.Reddit(user_agent=user_agent, client_id=app_key,
                             client_secret=app_secret, username=username,
@@ -106,6 +106,10 @@ def does_comment_has_signature(comment_body):
 def serve():
     global last_checked_comment
     for comment in reddit_client.subreddit('all').stream.comments():
+        # ignore comments from main sub
+        subreddit_name = comment.subreddit.display_name
+        if subreddit_name.lower() in ignore_subs:
+            continue
         if comment.id in last_checked_comment:
             break
         last_checked_comment.append(comment.id)
