@@ -103,6 +103,14 @@ def does_comment_has_signature(comment_body):
     return True
 
 
+# if the comment thanked the bot, return true
+def is_thanked(comment_body):
+    comment_body = comment_body.strip().lower()
+    if 'thank' in comment_body or 'good bot' in comment_body:
+        return True
+    return False
+
+
 def serve():
     global last_checked_comment
     for comment in reddit_client.subreddit('all').stream.comments():
@@ -130,7 +138,7 @@ def reply_to_self_comments():
         if is_already_thanked(comment_id=comment.id) or not comment.new:
             break
         comment.mark_read()
-        if 'thank' in comment.body.lower():
+        if is_thanked(comment_body=comment.body):
             comment.reply(get_a_random_message())
             thanked_comments.append(comment.id)
             log_this_comment(comment, TableName=ThankedComments)
